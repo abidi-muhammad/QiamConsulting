@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion'
-import AppLayout from '../../layouts/AppLayout'
-import Services from '../../components/Services'
+import AppLayout from '@/layouts/appLayout'
+import ServicesComponent from '@/components/custom/services'
 import { Cloud, Shield, Server, Zap } from 'lucide-react'
 
-export default function ServicesPage() {
+export default function Services() {
   const processSteps = [
     {
       title: "Discovery",
@@ -27,15 +27,15 @@ export default function ServicesPage() {
     }
   ]
 
-  const breadcrumbItems = [
+  const breadcrumbs = [
     { label: 'Home', href: '/' },
-    { label: 'Services', href: '/services' },
+    { label: 'Services', href: null },
   ]
 
   return (
-    <AppLayout breadcrumbs={breadcrumbItems}>
+    <AppLayout breadcrumbs={breadcrumbs}>
       {/* Services Grid */}
-      <Services />
+      <ServicesComponent />
 
       {/* Process Section */}
       <section className="py-20 bg-gray-50 dark:bg-gray-900">

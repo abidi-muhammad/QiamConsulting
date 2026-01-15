@@ -1,11 +1,11 @@
 import { motion } from 'framer-motion'
 import { Cloud, Shield, Server, Database, Award, ArrowRight } from 'lucide-react'
-import AppLayout from '../../layouts/AppLayout'
+import AppLayout from '@/layouts/appLayout'
 
 export default function About() {
-  const breadcrumbItems = [
+  const breadcrumbs = [
     { label: 'Home', href: '/' },
-    { label: 'About', href: '/about' }
+    { label: 'About', href: null }
   ]
 
   const stats = [
@@ -62,7 +62,7 @@ export default function About() {
   ]
 
   return (
-    <AppLayout breadcrumbs={breadcrumbItems}>
+    <AppLayout breadcrumbs={breadcrumbs}>
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 py-20">
         <div className="max-w-7xl mx-auto px-4">

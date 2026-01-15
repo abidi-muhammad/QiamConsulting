@@ -1,5 +1,5 @@
 import { useState, FormEvent, ChangeEvent } from 'react'
-import AppLayout from '../../layouts/AppLayout'
+import AppLayout from '@/layouts/appLayout'
 
 interface ContactFormData {
   name: string
@@ -17,9 +17,9 @@ export default function Contact() {
   const [processing, setProcessing] = useState(false)
   const [status, setStatus] = useState<string | null>(null)
 
-  const breadcrumbItems = [
+  const breadcrumbs = [
     { label: 'Home', href: '/' },
-    { label: 'Contact', href: '/contact' }
+    { label: 'Contact', href: null }
   ]
 
   const handleChange = (field: keyof ContactFormData) => (
@@ -63,7 +63,7 @@ export default function Contact() {
   }
 
   return (
-    <AppLayout breadcrumbs={breadcrumbItems}>
+    <AppLayout breadcrumbs={breadcrumbs}>
       <div className="max-w-2xl mx-auto py-12 px-4">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Contact Us</h1>
         <p className="text-gray-600 dark:text-gray-300 mb-8">Get in touch with us</p>

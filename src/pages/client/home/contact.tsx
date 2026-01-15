@@ -5,6 +5,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import InputError from '@/components/input-error'
 
+
 interface ContactFormData {
   name: string
   email: string
@@ -62,56 +63,56 @@ export default function Contact() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto py-12 px-4">
-      <h1 className="text-3xl font-bold text-gray-900 mb-2">Contact Us</h1>
-      <p className="text-gray-600 mb-8">Get in touch with us</p>
+      <div className="max-w-2xl mx-auto py-12 px-4">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Contact Us</h1>
+        <p className="text-gray-600 mb-8">Get in touch with us</p>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <Label htmlFor="name">Name</Label>
-          <Input
-            id="name"
-            value={formData.name}
-            onChange={handleChange('name')}
-            className="mt-1"
-          />
-          <InputError message={errors.name} />
-        </div>
-
-        <div>
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            value={formData.email}
-            onChange={handleChange('email')}
-            className="mt-1"
-          />
-          <InputError message={errors.email} />
-        </div>
-
-        <div>
-          <Label htmlFor="message">Message</Label>
-          <Textarea
-            id="message"
-            value={formData.message}
-            onChange={handleChange('message')}
-            className="mt-1"
-            rows={4}
-          />
-          <InputError message={errors.message} />
-        </div>
-
-        <Button type="submit" disabled={processing}>
-          {processing ? 'Sending...' : 'Send Message'}
-        </Button>
-
-        {status && (
-          <div className={`p-4 rounded ${status.includes('Error') ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`}>
-            {status}
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <Label htmlFor="name">Name</Label>
+            <Input
+              id="name"
+              value={formData.name}
+              onChange={handleChange('name')}
+              className="mt-1"
+            />
+            <InputError message={errors.name} />
           </div>
-        )}
-      </form>
-    </div>
+
+          <div>
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              value={formData.email}
+              onChange={handleChange('email')}
+              className="mt-1"
+            />
+            <InputError message={errors.email} />
+          </div>
+
+          <div>
+            <Label htmlFor="message">Message</Label>
+            <Textarea
+              id="message"
+              value={formData.message}
+              onChange={handleChange('message')}
+              className="mt-1"
+              rows={4}
+            />
+            <InputError message={errors.message} />
+          </div>
+
+          <Button type="submit" disabled={processing}>
+            {processing ? 'Sending...' : 'Send Message'}
+          </Button>
+
+          {status && (
+            <div className={`p-4 rounded ${status.includes('Error') ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`}>
+              {status}
+            </div>
+          )}
+        </form>
+      </div>
   )
 }
