@@ -1,126 +1,119 @@
 import { useState, FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { LoaderCircle } from 'lucide-react'
-import InputError from '@/components/input-error'
-import TextLink from '@/components/text-link'
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import AuthLayout from '@/layouts/auth-layout'
 
 export default function Login() {
+  const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [remember, setRemember] = useState(false)
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({})
-  const [loading, setLoading] = useState(false)
-  const [status, setStatus] = useState<string | null>(null)
-  const navigate = useNavigate()
+  const [error, setError] = useState('')
 
-  const canResetPassword = true // Set based on your logic
-
-  const submit = async (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    setLoading(true)
-    setErrors({})
-
-    try {
-      // Replace with your actual API call
-      const response = await fetch('/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, remember }),
-      })
-
-      if (response.ok) {
-        navigate('/dashboard')
-      } else {
-        const data = await response.json()
-        setErrors(data.errors || {})
-      }
-    } catch (error) {
-      setErrors({ email: 'Something went wrong' })
-    } finally {
-      setLoading(false)
+    setError('')
+    
+    // Add your authentication logic here
+    console.log('Login attempt:', { email, password })
+    
+    // For demo purposes, just navigate to dashboard
+    // In real app, validate credentials first
+    if (email && password) {
+      navigate('/dashboard')
+    } else {
+      setError('Please fill in all fields')
     }
   }
 
   return (
-    <AuthLayout 
-      title="Log in to your account" 
-      description="Enter your email and password below to log in"
-    >
-      <form className="flex flex-col gap-6" onSubmit={submit}>
-        <div className="grid gap-6">
-          <div className="grid gap-2">
-            <Label htmlFor="email">Email address</Label>
-            <Input
-              id="email"
-              type="email"
-              required
-              autoFocus
-              tabIndex={1}
-              autoComplete="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="email@example.com"
-            />
-            <InputError message={errors.email} />
-          </div>
-
-          <div className="grid gap-2">
-            <div className="flex items-center">
-              <Label htmlFor="password">Password</Label>
-              {canResetPassword && (
-                <TextLink 
-                  to="/forgot-password" 
-                  className="ml-auto text-sm" 
-                  tabIndex={5}
-                >
-                  Forgot password?
-                </TextLink>
-              )}
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        <div>
+          <h2 className="mt-6 text-center text-3xl font-bold text-gray-900 dark:text-white">
+            Sign in to your account
+          </h2>
+          <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
+            Or{' '}
+            <Link to="/register" className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400">
+              create a new account
+            </Link>
+          </p>
+        </div>
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          {error && (
+            <div className="rounded-md bg-red-50 dark:bg-red-900/20 p-4">
+              <div className="text-sm text-red-700 dark:text-red-400">{error}</div>
             </div>
-            <Input
-              id="password"
-              type="password"
-              required
-              tabIndex={2}
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-            />
-            <InputError message={errors.password} />
+          )}
+          <div className="rounded-md shadow-sm space-y-4">
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Email address
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
+                placeholder="Email address"
+              />
+            </div>
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Password
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
+                placeholder="Password"
+              />
+            </div>
           </div>
 
-          <div className="flex items-center space-x-3">
-            <Checkbox
-              id="remember"
-              name="remember"
-              checked={remember}
-              onClick={() => setRemember(!remember)}
-              tabIndex={3}
-            />
-            <Label htmlFor="remember">Remember me</Label>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <input
+                id="remember-me"
+                name="remember-me"
+                type="checkbox"
+                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+              />
+              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900 dark:text-gray-300">
+                Remember me
+              </label>
+            </div>
+
+            <div className="text-sm">
+              <a href="#" className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400">
+                Forgot your password?
+              </a>
+            </div>
           </div>
 
-          <Button type="submit" className="mt-4 w-full" tabIndex={4} disabled={loading}>
-            {loading && <LoaderCircle className="h-4 w-4 animate-spin" />}
-            Log in
-          </Button>
-        </div>
+          <div>
+            <button
+              type="submit"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              Sign in
+            </button>
+          </div>
 
-        <div className="text-center text-sm text-muted-foreground">
-          Don't have an account?{' '}
-          <TextLink to="/register" tabIndex={5}>
-            Sign up
-          </TextLink>
-        </div>
-      </form>
-
-      {status && <div className="mb-4 text-center text-sm font-medium text-green-600">{status}</div>}
-    </AuthLayout>
+          <div className="text-center">
+            <Link to="/" className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-300">
+              ← Back to home
+            </Link>
+          </div>
+        </form>
+      </div>
+    </div>
   )
 }

@@ -1,24 +1,19 @@
-// resources/js/Pages/About.tsx
-import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { ArrowRight, Cloud, Shield, Server, Database, Zap, Award, Briefcase } from 'lucide-react';
-import { Home, User } from 'lucide-react';
-import AppLayout from '../layout';
-import Breadcrumb from '../layout/breadcrumb';
+import { motion } from 'framer-motion'
+import { Cloud, Shield, Server, Database, Award, ArrowRight } from 'lucide-react'
+import AppLayout from '../../layouts/AppLayout'
 
-
-const About = () => {
+export default function About() {
   const breadcrumbItems = [
     { label: 'Home', href: '/' },
-    { label: 'About', href: null }
-  ];
+    { label: 'About', href: '/about' }
+  ]
 
   const stats = [
     { value: '15+', label: 'Years Experience' },
     { value: '50+', label: 'Enterprise Clients' },
     { value: '99.99%', label: 'System Uptime' },
     { value: '20%', label: 'Avg. Cost Savings' }
-  ];
+  ]
 
   const expertise = [
     {
@@ -41,7 +36,7 @@ const About = () => {
       title: 'Data Analytics',
       description: 'Enterprise data platforms and BI solutions'
     }
-  ];
+  ]
 
   const experience = [
     {
@@ -64,15 +59,10 @@ const About = () => {
         'Azure Sentinel implementation'
       ]
     }
-    // Add more experiences as needed
-  ];
+  ]
 
   return (
-    <AppLayout breadcrumbs={breadcrumbItems} breadcrumb_page_title='About'>
-      
-
-
-
+    <AppLayout breadcrumbs={breadcrumbItems}>
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 py-20">
         <div className="max-w-7xl mx-auto px-4">
@@ -94,10 +84,10 @@ const About = () => {
                 environments, I help organizations transform their infrastructure with
                 security-first, cost-optimized solutions.
               </p>
-              <Button className="gap-2">
+              <button className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white hover:bg-blue-700 rounded-md font-medium transition-colors">
                 View My Resume
                 <ArrowRight className="w-4 h-4" />
-              </Button>
+              </button>
             </div>
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
@@ -106,11 +96,9 @@ const About = () => {
               className="relative"
             >
               <div className="bg-white dark:bg-gray-800 p-2 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700">
-                <img
-                  src="/images/profile.jpg"
-                  alt="Salman Ahmed"
-                  className="rounded-xl w-full h-auto"
-                />
+                <div className="rounded-xl w-full h-64 bg-gradient-to-br from-blue-100 to-cyan-100 dark:from-blue-900/30 dark:to-cyan-900/30 flex items-center justify-center">
+                  <div className="text-6xl">👨‍💼</div>
+                </div>
               </div>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -128,7 +116,7 @@ const About = () => {
 
       {/* Stats Section */}
       <section className="py-16 px-4 bg-white dark:bg-gray-950">
-        <div className="max-w-7xl mx-auto  px-5 xl:px-0">
+        <div className="max-w-7xl mx-auto px-5 xl:px-0">
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -159,7 +147,7 @@ const About = () => {
 
       {/* Expertise Section */}
       <section className="py-20 px-4 bg-gray-50 dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto  px-5 xl:px-0">
+        <div className="max-w-7xl mx-auto px-5 xl:px-0">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -202,7 +190,7 @@ const About = () => {
 
       {/* Experience Section */}
       <section className="py-20 px-4 bg-white dark:bg-gray-950">
-        <div className="max-w-7xl mx-auto  px-5 xl:px-0">
+        <div className="max-w-7xl mx-auto px-5 xl:px-0">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -263,7 +251,7 @@ const About = () => {
 
       {/* CTA Section */}
       <section className="py-20 px-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white">
-        <div className="max-w-7xl mx-auto text-center  px-5 xl:px-0">
+        <div className="max-w-7xl mx-auto text-center px-5 xl:px-0">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -277,15 +265,13 @@ const About = () => {
             <p className="text-xl mb-8 text-blue-100">
               Let's discuss how my expertise can benefit your organization.
             </p>
-            <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 gap-2">
+            <button className="flex items-center gap-2 mx-auto px-6 py-3 bg-white text-blue-600 hover:bg-gray-100 rounded-md font-medium transition-colors">
               Schedule Consultation
               <ArrowRight className="w-4 h-4" />
-            </Button>
+            </button>
           </motion.div>
         </div>
       </section>
     </AppLayout>
-  );
-};
-
-export default About;
+  )
+}
