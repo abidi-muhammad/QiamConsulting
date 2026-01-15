@@ -1,12 +1,12 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Home from './pages/client/Home'
-import Services from './pages/client/Services'
-import About from './pages/client/About'
-import Contact from './pages/client/Contact'
-import Dashboard from "./pages/Dashboard"
-import Login from './pages/auth/Login'
-import Register from './pages/auth/Register'
-import Welcome from './pages/Welcome'
+import Home from './pages/Home'
+import Services from './pages/client/services/Services'
+import About from './pages/client/about/About'
+import Contact from './pages/client/contact/Contact'
+import Dashboard from "./pages/dashboard"
+import Login from './pages/auth/login'
+import Register from './pages/auth/register'
+import Welcome from './pages/welcome'
 import './App.css'
 
 function App() {
