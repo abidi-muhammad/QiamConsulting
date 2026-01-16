@@ -26,21 +26,21 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Deploy via SFTP with sshpass
+      - name: Deploy to Public_HTML Root
         env:
           SSH_USER: ${{ secrets.SSH_USERNAME }}
           SSH_PASS: ${{ secrets.SSH_PASSWORD }}
           SSH_HOST: 107.180.116.40
         run: |
-          # Install sshpass
           sudo apt-get update
           sudo apt-get install -y sshpass lftp
           
-          # Use lftp for reliable upload (better than sftp for this)
           lftp -c "
           set sftp:auto-confirm yes;
           open sftp://$SSH_USER:$SSH_PASS@$SSH_HOST;
           cd /home/zqr09s96d5z9/public_html;
-          mirror --reverse --delete --verbose ./dist/ ./qiamconsulting.com/;
+          mdelete -f *;
+          lcd dist;
+          mput -d *;
           bye;
           "
