@@ -1,6 +1,4 @@
-import { Link } from 'react-router-dom';
 import { Sidebar, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
-import AppLogo from './app-logo';
 
 
 
@@ -11,9 +9,7 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link to="/dashboard">
-                                <AppLogo />
-                            </Link>
+
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>

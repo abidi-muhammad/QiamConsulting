@@ -1,5 +1,5 @@
 import { motion, useInView } from 'framer-motion';
-import { Cloud, Shield, Zap, Database, Lock, TrendingUp, Cpu, Network, ArrowRight, CheckCircle2, Sparkles } from 'lucide-react';
+import { Cloud, Shield, Zap, Database, Lock, TrendingUp, Cpu, Network, ArrowRight, Sparkles } from 'lucide-react';
 import { useRef } from 'react';
 import Layout from '../layout';
 import { Button } from '@/components/ui/button';

@@ -1,0 +1,45 @@
+{
+  "hero": {
+    "badge": "Trusted by 50+ enterprises worldwide",
+    "title": "Transform Your",
+    "titleGradient": "Cloud Infrastructure",
+    "subtitle": "Enterprise-grade cloud solutions with 99.99% uptime, advanced security, and 40% cost savings.",
+    "ctaPrimary": "Get Started Free",
+    "ctaSecondary": "Watch Demo",
+    "socialProof": [
+      "No credit card required",
+      "Free 14-day trial",
+      "Cancel anytime"
+    ]
+  },
+  "navbar": {
+    "brandName": "QiamConsulting",
+    "ctaButton": "Get Started"
+  },
+  "services": {
+    "badge": "Our Services",
+    "title": "Comprehensive",
+    "titleGradient": "Cloud Solutions",
+    "subtitle": "From migration to optimization, we provide end-to-end cloud services tailored to your business needs."
+  },
+  "about": {
+    "badge": "About Us",
+    "name": "Salman Ahmed",
+    "titleGradient": "Cloud Expert",
+    "description": "With over 15 years of experience designing and securing enterprise-scale cloud environments, I help organizations transform their infrastructure with security-first, cost-optimized solutions."
+  },
+  "contact": {
+    "badge": "Get In Touch",
+    "title": "Let's Build",
+    "titleGradient": "Something Amazing",
+    "subtitle": "Ready to transform your cloud infrastructure? We're here to help you succeed.",
+    "email": "qaimconsulting@gmail.com",
+    "phone": "Coming soon",
+    "location": "Canada"
+  },
+  "footer": {
+    "brandName": "QiamConsulting",
+    "description": "Transform your cloud infrastructure with expert consultation and cutting-edge solutions.",
+    "copyright": "QiamConsulting. All rights reserved."
+  }
+}
