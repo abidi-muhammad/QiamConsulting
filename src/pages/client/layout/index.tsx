@@ -1,186 +1,166 @@
-import { Link } from "react-router-dom"
-// resources/js/Layouts/AppLayout.jsx
-import { motion } from 'framer-motion';
-
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink } from '@/components/ui/navigation-menu';
-import { type ReactNode } from 'react';
-import Breadcrumb, { BreadcrumbItem } from './breadcrumb';
-import ThemeToggle from './theme-toggle';
-import { MobileMenu } from './mobile-menu';
-import BookConsultation from '@/components/custom/book-consultation';
+import { Menu, Moon, Sun, Cloud } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import MobileMenu from './mobile-menu';
+import Footer from './footer';
+import AdminPanel from '@/components/AdminPanel';
 
+const navLinks = [
+  { name: 'Services', href: '/services' },
+  { name: 'About', href: '/about' },
+  { name: 'Contact', href: '/contact' },
+];
 
-interface AppLayoutProps {
-  children?: ReactNode;
-  breadcrumb_status?: boolean;
-  breadcrumbs?: BreadcrumbItem[];
-  breadcrumb_page_title?: string;
+interface LayoutProps {
+  children: React.ReactNode;
 }
-const AppLayout = ({ children, breadcrumb_status = true, breadcrumb_page_title, breadcrumbs = [] }: AppLayoutProps) => {
-  const navLinks = [
-    { name: 'Home', href: '/' },
-    { name: 'Services', href: '/services' },
-    { name: 'About', href: '/about' },
-    { name: 'Contact', href: '/contact' },
-  ];
+
+const Layout = ({ children }: LayoutProps) => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
+
+  const { scrollY } = useScroll();
+  const headerY = useTransform(scrollY, [0, 100], [0, -10]);
+
+  useEffect(() => {
+    const isDark = localStorage.getItem('darkMode') === 'true' || 
+      (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    setDarkMode(isDark);
+    document.documentElement.classList.toggle('dark', isDark);
+
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const toggleDarkMode = () => {
+    const newMode = !darkMode;
+    setDarkMode(newMode);
+    localStorage.setItem('darkMode', String(newMode));
+    document.documentElement.classList.toggle('dark', newMode);
+  };
 
   return (
-    <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 transition-colors duration-300">
-      {/* Header */}
+    <div className="min-h-screen bg-white dark:bg-gray-950 transition-colors duration-300">
+      {/* Modern Header */}
       <motion.header
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800"
+        style={{ y: headerY }}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled 
+            ? 'bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl shadow-lg shadow-black/5' 
+            : 'bg-transparent'
+        }`}
       >
-        <div className="max-w-7xl mx-auto flex items-center justify-between h-16 px-4">
-          {/* Logo */}
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Link href="/" className="flex items-center gap-2">
-              <svg className="w-8 h-8 text-blue-600" viewBox="0 0 24 24">
-                <path fill="currentColor" d="M12 2L2 7v10l10 5l10-5V7L12 2m0 2.8L20 9v6l-8 4l-8-4V9l8-4.2M12 12l-3.2 1.8l.6 1.2L12 13l2.6 1.5l.6-1.2L12 12z" />
-              </svg>
-              <span className="text-xl font-bold text-gray-900 dark:text-white">Qiamconsulting</span>
+        <nav className="container-custom">
+          <div className="flex items-center justify-between h-20">
+            {/* Logo */}
+            <Link to="/" className="flex items-center gap-3 group">
+              <motion.div
+                whileHover={{ rotate: 360 }}
+                transition={{ duration: 0.6 }}
+                className="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-xl flex items-center justify-center shadow-lg"
+              >
+                <Cloud className="w-6 h-6 text-white" />
+              </motion.div>
+              <span className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+                QiamConsulting
+              </span>
             </Link>
-          </motion.div>
 
-          {/* Navigation */}
-          <NavigationMenu>
-            <NavigationMenuList className="hidden lg:flex gap-2">
-              {navLinks.map((link) => (
-                <NavigationMenuItem key={link.name}>
-                  <NavigationMenuLink asChild>
-                    <motion.div
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <Link
-                        to={link.href}
-                        className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 rounded-md transition-colors"
-                      >
-                        {link.name}
-                      </Link>
-                    </motion.div>
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-              ))}
-            </NavigationMenuList>
-          </NavigationMenu>
+            {/* Desktop Navigation */}
+            <div className="hidden lg:flex items-center gap-8">
+              {navLinks.map((link) => {
+                const isActive = location.pathname === link.href;
+                return (
+                  <Link
+                    key={link.name}
+                    to={link.href}
+                    className="relative group"
+                  >
+                    <span className={`text-sm font-medium transition-colors ${
+                      isActive 
+                        ? 'text-gray-900 dark:text-white' 
+                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                    }`}>
+                      {link.name}
+                    </span>
+                    {isActive ? (
+                      <motion.span
+                        layoutId="activeNav"
+                        className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 to-cyan-600"
+                        transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+                      />
+                    ) : (
+                      <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 to-cyan-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+                    )}
+                  </Link>
+                );
+              })}
+            </div>
 
-          {/* Mobile Menu Button (will need separate component for mobile menu) */}
-          <MobileMenu navLinks={navLinks}/>
+            {/* Right Actions */}
+            <div className="flex items-center gap-3">
+              {/* Dark Mode Toggle */}
+              <button
+                onClick={toggleDarkMode}
+                className="p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
+                aria-label="Toggle dark mode"
+              >
+                <motion.div
+                  initial={false}
+                  animate={{ rotate: darkMode ? 180 : 0, scale: darkMode ? 0.9 : 1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {darkMode ? (
+                    <Sun className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                  ) : (
+                    <Moon className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                  )}
+                </motion.div>
+              </button>
 
-          {/* CTA Button */}
-          <div className='hidden md:flex flex-row-reverse items-center gap-4'>
-            <ThemeToggle />
+              {/* CTA Button - Desktop */}
+              <Button className="hidden lg:inline-flex bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/40 transition-all">
+                Get Started
+              </Button>
 
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <BookConsultation />
-            </motion.div>
+              {/* Mobile Menu Toggle */}
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="lg:hidden p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
+                aria-label="Toggle menu"
+              >
+                <motion.div
+                  animate={{ rotate: mobileMenuOpen ? 90 : 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Menu className="w-6 h-6 text-gray-700 dark:text-gray-300" />
+                </motion.div>
+              </button>
+            </div>
           </div>
-        </div>
+        </nav>
       </motion.header>
 
-      {/* Main Content */}
+      {/* Mobile Menu */}
+      <MobileMenu isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
 
-      {breadcrumb_status && <Breadcrumb breadcrumb_page_title={breadcrumb_page_title} items={breadcrumbs} />}
-      <main className="flex-1">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          {children}
-        </motion.div>
+      {/* Main Content */}
+      <main>
+        {children}
       </main>
 
       {/* Footer */}
-      <motion.footer
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        viewport={{ once: true }}
-        className="bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700"
-      >
-        <div className="max-w-7xl mx-auto py-12 px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            {/* Company Info */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-2">
-                <svg className="w-8 h-8 text-blue-600" viewBox="0 0 24 24">
-                  <path fill="currentColor" d="M12 2L2 7v10l10 5l10-5V7L12 2m0 2.8L20 9v6l-8 4l-8-4V9l8-4.2M12 12l-3.2 1.8l.6 1.2L12 13l2.6 1.5l.6-1.2L12 12z" />
-                </svg>
-                <span className="text-xl font-bold text-gray-900 dark:text-white">Qiamconsulting</span>
-              </div>
-              <p className="text-gray-600 dark:text-gray-300">
-                Expert cloud architecture and security consultation services.
-              </p>
-            </div>
-
-            {/* Quick Links */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Quick Links</h3>
-              <ul className="space-y-2">
-                {navLinks.map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      to={link.href}
-                      className="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors"
-                    >
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Contact Info */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Contact</h3>
-              <address className="not-italic text-gray-600 dark:text-gray-300 space-y-2">
-                <p>Canada</p>
-                <p>Email: qaimconsulting@gmail.com</p>
-                <p>Phone: 00000</p>
-              </address>
-            </div>
-
-            {/* Social Links */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Connect</h3>
-              <div className="flex gap-4">
-                {['linkedin', 'twitter', 'github'].map((social) => (
-                  <motion.a
-                    key={social}
-                    href="#"
-                    whileHover={{ y: -2 }}
-                    whileTap={{ scale: 0.9 }}
-                    className="p-2 rounded-full bg-white dark:bg-gray-700 shadow-sm hover:shadow-md transition-shadow"
-                  >
-                    <span className="sr-only">{social}</span>
-                    <svg className="w-5 h-5 text-gray-700 dark:text-gray-300">
-                      {/* Social icons would go here */}
-                    </svg>
-                  </motion.a>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Copyright */}
-          <div className="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-center text-gray-500 dark:text-gray-400">
-            <p>© {new Date().getFullYear()} Qiamconsulting. All rights reserved.</p>
-          </div>
-        </div>
-      </motion.footer>
+      <Footer />
+      <AdminPanel />
     </div>
   );
 };
 
-export default AppLayout;
+export default Layout;

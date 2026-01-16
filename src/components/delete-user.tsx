@@ -1,56 +1,88 @@
-import { useState } from 'react'
+import { FormEventHandler, useRef } from 'react';
+
+import InputError from '@/components/input-error';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+
+import HeadingSmall from '@/components/heading-small';
+
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 export default function DeleteUser() {
-  const [password, setPassword] = useState('')
-  const [confirmOpen, setConfirmOpen] = useState(false)
+    const passwordInput = useRef<HTMLInputElement>(null);
+    const { data, setData, delete: destroy, processing, reset, errors, clearErrors } = useForm<Required<{ password: string }>>({ password: '' });
 
-  const handleDelete = () => {
-    console.log('Delete account with password:', password)
-    // Add your delete logic here
-  }
+    const deleteUser: FormEventHandler = (e) => {
+        e.preventDefault();
 
-  return (
-    <div className="border-t pt-6 mt-6">
-      <h3 className="text-lg font-medium text-red-600">Delete Account</h3>
-      <p className="mt-1 text-sm text-gray-600">
-        Once your account is deleted, all of its resources and data will be permanently deleted.
-      </p>
-      
-      <button
-        onClick={() => setConfirmOpen(true)}
-        className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-      >
-        Delete Account
-      </button>
+        destroy(route('profile.destroy'), {
+            preserveScroll: true,
+            onSuccess: () => closeModal(),
+            onError: () => passwordInput.current?.focus(),
+            onFinish: () => reset(),
+        });
+    };
 
-      {confirmOpen && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded">
-            <h4 className="text-lg font-bold">Confirm Deletion</h4>
-            <p className="mt-2">Please enter your password to confirm:</p>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-2 border rounded mt-2"
-            />
-            <div className="mt-4 flex space-x-2">
-              <button
-                onClick={handleDelete}
-                className="px-4 py-2 bg-red-600 text-white rounded"
-              >
-                Delete
-              </button>
-              <button
-                onClick={() => setConfirmOpen(false)}
-                className="px-4 py-2 bg-gray-300 rounded"
-              >
-                Cancel
-              </button>
+    const closeModal = () => {
+        clearErrors();
+        reset();
+    };
+
+    return (
+        <div className="space-y-6">
+            <HeadingSmall title="Delete account" description="Delete your account and all of its resources" />
+            <div className="space-y-4 rounded-lg border border-red-100 bg-red-50 p-4 dark:border-red-200/10 dark:bg-red-700/10">
+                <div className="relative space-y-0.5 text-red-600 dark:text-red-100">
+                    <p className="font-medium">Warning</p>
+                    <p className="text-sm">Please proceed with caution, this cannot be undone.</p>
+                </div>
+
+                <Dialog>
+                    <DialogTrigger asChild>
+                        <Button variant="destructive">Delete account</Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                        <DialogTitle>Are you sure you want to delete your account?</DialogTitle>
+                        <DialogDescription>
+                            Once your account is deleted, all of its resources and data will also be permanently deleted. Please enter your password
+                            to confirm you would like to permanently delete your account.
+                        </DialogDescription>
+                        <form className="space-y-6" onSubmit={deleteUser}>
+                            <div className="grid gap-2">
+                                <Label htmlFor="password" className="sr-only">
+                                    Password
+                                </Label>
+
+                                <Input
+                                    id="password"
+                                    type="password"
+                                    name="password"
+                                    ref={passwordInput}
+                                    value={data.password}
+                                    onChange={(e) => setData('password', e.target.value)}
+                                    placeholder="Password"
+                                    autoComplete="current-password"
+                                />
+
+                                <InputError message={errors.password} />
+                            </div>
+
+                            <DialogFooter className="gap-2">
+                                <DialogClose asChild>
+                                    <Button variant="secondary" onClick={closeModal}>
+                                        Cancel
+                                    </Button>
+                                </DialogClose>
+
+                                <Button variant="destructive" disabled={processing} asChild>
+                                    <button type="submit">Delete account</button>
+                                </Button>
+                            </DialogFooter>
+                        </form>
+                    </DialogContent>
+                </Dialog>
             </div>
-          </div>
         </div>
-      )}
-    </div>
-  )
+    );
 }

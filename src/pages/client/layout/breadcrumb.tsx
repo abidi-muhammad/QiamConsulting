@@ -1,6 +1,5 @@
-import { Link } from "react-router-dom"
+import { Link } from 'react-router-dom';
 // resources/js/Components/Breadcrumb.jsx
-
 import { ChevronRight } from 'lucide-react';
 
 
@@ -22,8 +21,7 @@ const Breadcrumb = ({ breadcrumb_page_title = "", items }: { breadcrumb_page_tit
                 <ChevronRight className="w-4 h-4 text-gray-400 mx-2" />
               )}
               {item.href ? (
-                <Link
-                  to={item.href}
+                <Link to={item.href}
                   className={`inline-flex items-center text-sm font-medium ${index === items.length - 1
                     ? 'text-gray-700 dark:text-gray-300'
                     : 'text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white'

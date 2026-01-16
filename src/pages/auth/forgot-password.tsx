@@ -1,5 +1,5 @@
+import { Link } from 'react-router-dom';
 // Components
-
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
@@ -18,13 +18,11 @@ export default function ForgotPassword({ status }: { status?: string }) {
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        post("'password.email'");
+        post(route('password.email'));
     };
 
     return (
         <AuthLayout title="Forgot password" description="Enter your email to receive a password reset link">
-            
-
             {status && <div className="mb-4 text-center text-sm font-medium text-green-600">{status}</div>}
 
             <div className="space-y-6">
@@ -55,7 +53,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
 
                 <div className="space-x-1 text-center text-sm text-muted-foreground">
                     <span>Or, return to</span>
-                    <TextLink to="'login'">log in</TextLink>
+                    <TextLink href={'/login'}>log in</TextLink>
                 </div>
             </div>
         </AuthLayout>

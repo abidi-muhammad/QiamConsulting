@@ -1,54 +1,68 @@
-import { ReactNode } from 'react'
+import * as React from "react"
 
-interface CardProps {
-  children: ReactNode
-  className?: string
-}
+import { cn } from "@/lib/utils"
 
-export function Card({ children, className = '' }: CardProps) {
+function Card({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <div className={`bg-white rounded-lg shadow ${className}`}>
-      {children}
-    </div>
+    <div
+      data-slot="card"
+      className={cn(
+        "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm",
+        className
+      )}
+      {...props}
+    />
   )
 }
 
-export function CardHeader({ children, className = '' }: CardProps) {
+function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <div className={`p-6 border-b ${className}`}>
-      {children}
-    </div>
+    <div
+      data-slot="card-header"
+      className={cn("flex flex-col gap-1.5 px-6", className)}
+      {...props}
+    />
   )
 }
 
-export function CardTitle({ children, className = '' }: CardProps) {
+function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <h3 className={`text-xl font-semibold ${className}`}>
-      {children}
-    </h3>
+    <div
+      data-slot="card-title"
+      className={cn("leading-none font-semibold", className)}
+      {...props}
+    />
   )
 }
 
-export function CardDescription({ children, className = '' }: CardProps) {
+function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <p className={`text-gray-600 mt-1 ${className}`}>
-      {children}
-    </p>
+    <div
+      data-slot="card-description"
+      className={cn("text-muted-foreground text-sm", className)}
+      {...props}
+    />
   )
 }
 
-export function CardContent({ children, className = '' }: CardProps) {
+function CardContent({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <div className={`p-6 ${className}`}>
-      {children}
-    </div>
+    <div
+      data-slot="card-content"
+      className={cn("px-6", className)}
+      {...props}
+    />
   )
 }
 
-export function CardFooter({ children, className = '' }: CardProps) {
+function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <div className={`p-6 border-t ${className}`}>
-      {children}
-    </div>
+    <div
+      data-slot="card-footer"
+      className={cn("flex items-center px-6", className)}
+      {...props}
+    />
   )
 }
+
+export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }

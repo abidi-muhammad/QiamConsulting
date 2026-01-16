@@ -1,4 +1,3 @@
-
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
@@ -30,15 +29,13 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-        post("'password.store'", {
+        post(route('password.store'), {
             onFinish: () => reset('password', 'password_confirmation'),
         });
     };
 
     return (
         <AuthLayout title="Reset password" description="Please enter your new password below">
-            
-
             <form onSubmit={submit}>
                 <div className="grid gap-6">
                     <div className="grid gap-2">

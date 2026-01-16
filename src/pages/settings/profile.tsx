@@ -1,99 +1,124 @@
-import { useState, FormEvent } from 'react'
-import { Link } from 'react-router-dom'
-import { Transition } from '@headlessui/react'
-import DeleteUser from '@/components/delete-user'
-import HeadingSmall from '@/components/heading-small'
-import InputError from '@/components/input-error'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import AppLayout from '@/layouts/app-layout'
-import SettingsLayout from '@/layouts/settings/layout'
+import { Link } from 'react-router-dom';
+import { type BreadcrumbItem, type SharedData } from '@/types';
+import { Transition } from '@headlessui/react';
+import { FormEventHandler } from 'react';
 
-interface BreadcrumbItem {
-  label: string
-  href: string
-}
+import DeleteUser from '@/components/delete-user';
+import HeadingSmall from '@/components/heading-small';
+import InputError from '@/components/input-error';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import AppLayout from '@/layouts/app-layout';
+import SettingsLayout from '@/layouts/settings/layout';
 
-interface User {
-  name: string
-  email: string
-}
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Profile settings',
+        href: '/settings/profile',
+    },
+];
 
-export default function Profile() {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [errors, setErrors] = useState<{ name?: string; email?: string }>({})
-  const [status, setStatus] = useState<string | null>(null)
+type ProfileForm = {
+    name: string;
+    email: string;
+};
 
-  const submit = (e: FormEvent) => {
-    e.preventDefault()
-    // Add your form submission logic here
-    console.log({ name, email })
-  }
+export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: boolean; status?: string }) {
+    const { auth } = usePage<SharedData>().props;
 
-  const breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Settings', href: '/settings' },
-    { label: 'Profile', href: '/settings/profile' },
-  ]
+    const { data, setData, patch, errors, processing, recentlySuccessful } = useForm<Required<ProfileForm>>({
+        name: auth.user.name,
+        email: auth.user.email,
+    });
 
-  return (
-    <AppLayout breadcrumbs={breadcrumbs}>
-      <SettingsLayout>
-        <div className="space-y-6">
-          <div>
-            <HeadingSmall
-              title="Profile Information"
-              description="Update your account's profile information and email address."
-            />
-          </div>
+    const submit: FormEventHandler = (e) => {
+        e.preventDefault();
 
-          <form onSubmit={submit} className="space-y-6">
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="name">Name</Label>
-                <Input
-                  id="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="mt-1 block w-full"
-                  required
-                />
-                <InputError message={errors.name} className="mt-2" />
-              </div>
+        patch(route('profile.update'), {
+            preserveScroll: true,
+        });
+    };
 
-              <div>
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="mt-1 block w-full"
-                  required
-                />
-                <InputError message={errors.email} className="mt-2" />
-              </div>
-            </div>
+    return (
+        <AppLayout breadcrumbs={breadcrumbs}>
+            <SettingsLayout>
+                <div className="space-y-6">
+                    <HeadingSmall title="Profile information" description="Update your name and email address" />
 
-            <div className="flex items-center gap-4">
-              <Button type="submit">Save</Button>
+                    <form onSubmit={submit} className="space-y-6">
+                        <div className="grid gap-2">
+                            <Label htmlFor="name">Name</Label>
 
-              <Transition
-                show={!!status}
-                enter="transition ease-in-out"
-                enterFrom="opacity-0"
-                leave="transition ease-in-out"
-                leaveTo="opacity-0"
-              >
-                <p className="text-sm text-gray-600">{status}</p>
-              </Transition>
-            </div>
-          </form>
+                            <Input
+                                id="name"
+                                className="mt-1 block w-full"
+                                value={data.name}
+                                onChange={(e) => setData('name', e.target.value)}
+                                required
+                                autoComplete="name"
+                                placeholder="Full name"
+                            />
 
-          <DeleteUser />
-        </div>
-      </SettingsLayout>
-    </AppLayout>
-  )
+                            <InputError className="mt-2" message={errors.name} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="email">Email address</Label>
+
+                            <Input
+                                id="email"
+                                type="email"
+                                className="mt-1 block w-full"
+                                value={data.email}
+                                onChange={(e) => setData('email', e.target.value)}
+                                required
+                                autoComplete="username"
+                                placeholder="Email address"
+                            />
+
+                            <InputError className="mt-2" message={errors.email} />
+                        </div>
+
+                        {mustVerifyEmail && auth.user.email_verified_at === null && (
+                            <div>
+                                <p className="-mt-4 text-sm text-muted-foreground">
+                                    Your email address is unverified.{' '}
+                                    <Link to={route('verification.send')}
+                                        method="post"
+                                        as="button"
+                                        className="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
+                                    >
+                                        Click here to resend the verification email.
+                                    </Link>
+                                </p>
+
+                                {status === 'verification-link-sent' && (
+                                    <div className="mt-2 text-sm font-medium text-green-600">
+                                        A new verification link has been sent to your email address.
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+                        <div className="flex items-center gap-4">
+                            <Button disabled={processing}>Save</Button>
+
+                            <Transition
+                                show={recentlySuccessful}
+                                enter="transition ease-in-out"
+                                enterFrom="opacity-0"
+                                leave="transition ease-in-out"
+                                leaveTo="opacity-0"
+                            >
+                                <p className="text-sm text-neutral-600">Saved</p>
+                            </Transition>
+                        </div>
+                    </form>
+                </div>
+
+                <DeleteUser />
+            </SettingsLayout>
+        </AppLayout>
+    );
 }

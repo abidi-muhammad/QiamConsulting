@@ -1,19 +1,16 @@
+import Layout from '../layout';
+import Hero from './hero';
+import Services from './services';
+import ContactSection from './contact';
 
-import Layout from "../layout";
-import Contact from "./contact";
-import Hero from "./hero";
-import Services from "./services";
-
-const Page = () => {
+const Home = () => {
   return (
-    <Layout breadcrumb_status={false}>
-      
-
+    <Layout>
       <Hero />
       <Services />
-      <Contact />
+      <ContactSection />
     </Layout>
   );
-}
+};
 
-export default Page;
+export default Home;
