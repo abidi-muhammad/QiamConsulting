@@ -70,13 +70,7 @@ const AdminPanel = () => {
   };
 
   const updateField = (section: string, field: string, value: any) => {
-    setEditedContent(prev => ({
-      ...prev,
-      [section]: {
-        ...prev[section],
-        [field]: value
-      }
-    }));
+    
   };
 
   return (
