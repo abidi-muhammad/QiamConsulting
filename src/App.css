@@ -4,6 +4,9 @@
 
 @layer base {
   :root {
+      --primary-rgb: 59 130 246;    /* blue-500 */
+      --accent-rgb: 6 182 212;      /* cyan-500 */    /* red-500 */
+      --info-rgb: 99 102 241;       /* indigo-500 */
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
@@ -32,6 +35,11 @@
   }
 
   .dark {
+    --primary-rgb: 96 165 250;    /* blue-400 */
+    --accent-rgb: 34 211 238;     /* cyan-400 */
+    --secondary-rgb: 167 139 250; /* violet-400 */
+    --danger-rgb: 248 113 113;    /* red-400 */
+    --info-rgb: 129 140 248;      /* indigo-400 */
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
     --card: 222.2 84% 4.9%;
