@@ -2,9 +2,8 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  base: '/',
+  base: '/QiamConsulting',  // CRITICAL: Must match your GitHub Pages path
   plugins: [react()],
   resolve: {
     alias: {
@@ -15,5 +14,6 @@ export default defineConfig({
     outDir: 'dist',
     assetsDir: 'assets',
     sourcemap: false,
+    emptyOutDir: true,
   },
 })
