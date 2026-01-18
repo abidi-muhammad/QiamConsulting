@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 import path from 'path'
 
 export default defineConfig({
-  base: '/QiamConsulting',  // CRITICAL: Must match your GitHub Pages path
+  base: '/QiamConsulting/',  // ← MUST match your repository name EXACTLY
   plugins: [react()],
   resolve: {
     alias: {
@@ -14,6 +14,5 @@ export default defineConfig({
     outDir: 'dist',
     assetsDir: 'assets',
     sourcemap: false,
-    emptyOutDir: true,
   },
 })
